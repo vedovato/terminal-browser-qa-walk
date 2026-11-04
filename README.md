@@ -29,7 +29,7 @@ An agent that tests a UI should show its work. terminal-browser renders a real C
 Needs `node`, `terminal-browser`, and inside Herdr `hc`.
 
 ```sh
-git clone git@github.com:<owner>/qa-walk.git ~/Developer/qa-walk
+git clone git@github.com:vedovato/qa-walk.git ~/Developer/qa-walk
 ~/Developer/qa-walk/skills/qa-walk/qa-browser.sh doctor    # what is missing
 ~/Developer/qa-walk/skills/qa-walk/qa-browser.sh setup     # installs terminal-browser (asks nothing: you run it)
 ```
@@ -41,7 +41,7 @@ ln -sfn ~/Developer/qa-walk/skills/qa-walk ~/.omp/agent/managed-skills/qa-walk  
 ln -sfn ~/Developer/qa-walk/skills/qa-walk ~/.claude/skills/qa-walk              # Claude Code
 ```
 
-Mod, on the machine where the Herdr window runs (or ask your agent: `Read ~/.config/herdr-app/AGENTS.md, then add this mod: herdr.dev/mods/<owner>/qa-walk`). Merge `qa-walk/keys.json` into your `keys.json` for `ctrl-alt-b`:
+Mod, on the machine where the Herdr window runs (or ask your agent: `Read ~/.config/herdr-app/AGENTS.md, then add this mod: herdr.dev/mods/vedovato/qa-walk`). Merge `qa-walk/keys.json` into your `keys.json` for `ctrl-alt-b`:
 
 ```sh
 ln -sfn ~/Developer/qa-walk/qa-walk/mods/qa-walk ~/.config/herdr-app/mods/qa-walk
