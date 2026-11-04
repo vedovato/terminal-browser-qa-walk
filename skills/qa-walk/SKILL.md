@@ -9,6 +9,10 @@ An agent-run pass over a running web app in a real browser, shown live next to t
 
 Project rules win. A walk is a check, not a change, and never replaces the human's own checks. Never use Playwright unless the project says so.
 
+## Dependencies
+
+`$S doctor` lists what is missing (exit 3). `$S setup` installs `terminal-browser` (`brew install` when brew exists, else the vendor's `curl | bash` installer) and says how to get `node` and `hc`, which it does not install. `open` refuses to run while anything is missing. Run `setup` only after the human agrees: it runs a third-party installer.
+
 ## Open, drive, close
 
 ```sh

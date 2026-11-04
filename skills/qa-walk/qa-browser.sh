@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# qa-browser.sh open <url> | go <url> | key | stop
+# qa-browser.sh doctor | setup | open <url> | go <url> | key | stop
 # Shows terminal-browser live beside the agent and prints its key. Drive it with:
 #   env -u TERM_PROGRAM terminal-browser action --browser "$(qa-browser.sh key)" -- snapshot|click|fill|eval|screenshot /tmp/x.png
 # Where the agent runs decides how the pane is made:
@@ -10,6 +10,13 @@
 set -euo pipefail
 NAME=qa-browser
 STATE=${TMPDIR:-/tmp}/qa-browser.key
+# Dependencies: terminal-browser and node always; hc only inside herdr-app.
+missing() {
+  command -v terminal-browser >/dev/null || echo terminal-browser
+  command -v node >/dev/null || echo node
+  [ -z "${HC_TERMINAL_ID:-}" ] || command -v hc >/dev/null || echo hc
+}
+need() { m=$(missing); [ -z "$m" ] || { echo "missing: $(echo $m); run: $0 setup" >&2; exit 3; }; }
 tb() { env -u TERM_PROGRAM terminal-browser "$@"; }
 key() { [ -s "$STATE" ] || { echo "no qa browser open: run open <url>" >&2; return 1; }; cat "$STATE"; }
 newkey() { # the browser that was not there before
@@ -17,7 +24,20 @@ newkey() { # the browser that was not there before
 }
 keys() { tb ls --all --json | node -e 'console.log(JSON.parse(require("fs").readFileSync(0,"utf8")).browsers.map(x=>x.key).join(" "))'; }
 case "${1:-}" in
+  doctor) m=$(missing); if [ -z "$m" ]; then echo "ok: $(terminal-browser --version 2>&1 | head -1)"; else echo "missing: $(echo $m)"; exit 3; fi ;;
+  setup)
+    for d in $(missing); do
+      case $d in
+        terminal-browser) # third-party installer: the caller must have the human's OK before running setup
+          if command -v brew >/dev/null; then brew install terminal-browser
+          else curl -fsSL https://terminal-browser.sh/install | bash; fi ;;
+        node) echo "node is missing: install it (https://nodejs.org or nvm); not installed automatically" >&2 ;;
+        hc) echo "hc is missing: it ships with herdr-app (herdr-core); not installed automatically" >&2 ;;
+      esac
+    done
+    m=$(missing); [ -z "$m" ] || { echo "still missing: $(echo $m)" >&2; exit 3; }; echo ok ;;
   open)
+    need
     url=${2:?url}; before=$(keys)
     if [ -n "${HC_TERMINAL_ID:-}" ]; then
       l=$(hc get "$HC_TERMINAL_ID" --json)
