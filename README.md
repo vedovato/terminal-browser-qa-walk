@@ -74,10 +74,6 @@ An agent can then drive the page with terminal-browser's own CLI, for example `e
 - Chromium refuses self-signed certificates. Over CDP on the browser's port (`terminal-browser ls --all --json`) send `Security.setIgnoreCertificateErrors`, then `Page.navigate`.
 - The popup and its buttons were checked by screenshot; the placements were driven through the commands above. Pressing the buttons by mouse was not exercised.
 
-## Share your own
-
-Put a mod in a public repo, one folder per mod like this one, with a `RECIPE.md` and a `preview.png`, and add the GitHub topic `herdr-mod`. It shows up at [herdr.dev/mods](https://herdr.dev/mods) within the hour. See the [Herdr mod guide](https://github.com/herdrdev/herdr-app/blob/master/defaults/AGENTS.md).
-
 ## License
 
 Apache-2.0
