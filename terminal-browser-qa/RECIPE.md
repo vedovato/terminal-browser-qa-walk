@@ -22,6 +22,7 @@ A small popup for opening a real browser beside your terminals. Type a URL, choo
 - **Floating:** the browser starts as its own core terminal, not shown in any tab, and a draggable window shows it. "Close" ends that terminal and the window closes with it. The window also closes when you quit the browser inside it.
 - The browser is always where the focused pane is: for a space on another machine it runs on that machine, so `terminal-browser` must be installed there.
 - Quit a split or tab browser with ctrl+q inside it; the pane closes when the program exits.
+- Scriptable while the popup is open: `herdr-app do terminal-browser-qa.url=<text>`, `terminal-browser-qa.place-right|place-down|place-tab|place-float` and `terminal-browser-qa.submit` do what typing, choosing and pressing Enter do. The mod reads them with `nextCommand()`.
 - Agent status colors do not apply: the mod shows no agents.
 
 ## Built from
@@ -35,6 +36,7 @@ A small popup for opening a real browser beside your terminals. Type a URL, choo
   - `run("terminal.kill", { terminal })` from the title bar's Close;
   - `shared`/`setShared` for the remembered URL (`qa-walk.url`) and place (`qa-walk.place`);
   - `spaces()` and `focused()` to find the focused space's machine.
+- **Commands from outside:** a `cx.spawn` loop on `nextCommand()` handles `url=<text>` (sets the input with `set_value`), `place-<place>` and `submit` (calls the same `open` as Enter).
 - **Programs it runs:** `terminal-browser` and `hc`. It reads no files and uses no network itself. Say so before adding it.
 
 ## Watch out
@@ -53,5 +55,6 @@ A small popup for opening a real browser beside your terminals. Type a URL, choo
 - `herdr-app do mod.open --name terminal-browser-qa` shows the popup with "Right split" chosen on a fresh home; running it again closes it.
 - Enter on `https://herdr.dev` with "Right split" opens a pane to the right showing the page; "Split below" opens one below; "Tab" opens a tab named "browser".
 - With "Floating", a window with a "QA browser" title bar opens over the layout, can be dragged by the bar, and "Close" removes it and ends its terminal (`hc ls` shows no `terminal-browser` left).
+- With the popup open, `herdr-app do terminal-browser-qa.url=https://herdr.dev`, `terminal-browser-qa.place-down` and `terminal-browser-qa.submit` open the page in a pane below the focused one; with `place-tab` a second tab; with `place-float` the floating window.
 - The chosen place and URL are still selected the next time the popup opens.
 - Esc closes the popup and changes nothing.
