@@ -3,7 +3,7 @@
 // Open the popup with: herdr-app do mod.open --name terminal-browser-qa   (or bind a key to mod.open:terminal-browser-qa).
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex, InputState, Input } from "gpui-base";
-import { run, props, closeOverlay, openOverlay, theme, shared, setShared, hc, focused, spaces } from "herdr";
+import { run, props, nextCommand, closeOverlay, openOverlay, theme, shared, setShared, hc, focused, spaces } from "herdr";
 
 const BROWSER = "terminal-browser";
 const PLACES = [["right", "Right split"], ["down", "Split below"], ["tab", "Tab"], ["float", "Floating"]];
@@ -24,6 +24,16 @@ export default class QaWalk extends View {
     this.input.focus();
     cx.timer.after(600, () => this.input.focus());
     this.handle = cx.focus_handle();
+    // Scriptable: herdr-app do terminal-browser-qa.<command>  (url=<text> | place-right|down|tab|float | submit)
+    cx.spawn(async (cx) => {
+      for (;;) {
+        const c = await nextCommand();
+        if (c.startsWith("url=")) { this.url = c.slice(4); this.input.set_value(this.url); }
+        else if (c.startsWith("place-")) this.place = c.slice(6);
+        else if (c === "submit") this.open(cx);
+        cx.notify();
+      }
+    });
   }
 
   open(cx) {
