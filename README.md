@@ -7,7 +7,7 @@ Two parts, use either or both:
 | Part | For | What it is |
 |---|---|---|
 | `skills/qa-walk` | the agent | an agent skill plus `qa-browser.sh`: install dependencies, open the browser pane, drive it, close it |
-| `mods/qa-walk` | you | a Herdr app mod: a small popup, type a URL, Enter, and the browser opens to the right of the focused pane |
+| `qa-walk/` (a [herdr.dev mod](https://herdr.dev/mods)) | you | a Herdr app mod: a popup where you type a URL and choose where the browser opens: right split (default), split below, tab or floating window |
 
 Project-agnostic. The project's own rules (which stack, which data, which model, what the report looks like) stay in the project.
 
@@ -17,6 +17,12 @@ An agent that tests a UI should show its work. terminal-browser renders a real C
 
 - `terminal-browser open --split` scripts the terminal it runs in. In Herdr's app it fails with `Ghostty is not running`, because the app reports itself as `ghostty` but is not.
 - Fix: start the browser as its own `hc` terminal carrying this tab's `herdr.space` and `herdr.tab` labels. Herdr adopts any terminal with those labels as a pane in that tab. `qa-browser.sh open` does exactly that.
+
+![qa-walk opening herdr.dev in a right split](qa-walk/preview.png)
+
+| Popup | Floating window |
+|---|---|
+| ![popup](qa-walk/popup.png) | ![floating](qa-walk/floating.png) |
 
 ## Install
 
@@ -35,10 +41,10 @@ ln -sfn ~/Developer/qa-walk/skills/qa-walk ~/.omp/agent/managed-skills/qa-walk  
 ln -sfn ~/Developer/qa-walk/skills/qa-walk ~/.claude/skills/qa-walk              # Claude Code
 ```
 
-Mod, on the machine where the Herdr window runs:
+Mod, on the machine where the Herdr window runs (or ask your agent: `Read ~/.config/herdr-app/AGENTS.md, then add this mod: herdr.dev/mods/<owner>/qa-walk`). Merge `qa-walk/keys.json` into your `keys.json` for `ctrl-alt-b`:
 
 ```sh
-ln -sfn ~/Developer/qa-walk/mods/qa-walk ~/.config/herdr-app/mods/qa-walk
+ln -sfn ~/Developer/qa-walk/qa-walk/mods/qa-walk ~/.config/herdr-app/mods/qa-walk
 herdr-app check ~/.config/herdr-app/mods/qa-walk
 herdr-app do mod.open --name qa-walk     # toggles the popup; bind a key to mod.open to keep it handy
 ```
@@ -89,6 +95,7 @@ If the agent runs on one machine and the Herdr window on another (an `hc machine
 
 - `stop` outside hc runs `terminal-browser shutdown`, which closes every terminal-browser, not just this one.
 - Chromium refuses self-signed certificates. Over CDP on the browser's `cdpPort` (`terminal-browser ls --all --json`) send `Security.setIgnoreCertificateErrors {ignore:true}`, then `Page.navigate`. `*.localhost` resolves to `::1` first, so a test proxy must listen dual-stack.
+- The mod only opens the browser; its floating window is an unlabeled core terminal that never shows in a tab, so a lost one is ended with `hc ls` and `hc kill <address>`.
 - The mod only opens the browser. Closing it is `ctrl+q` in the pane, or the agent's `stop`.
 - No CI: this is an interactive helper, not part of any build.
 
@@ -97,6 +104,16 @@ If the agent runs on one machine and the Herdr window on another (an `hc machine
 ```
 skills/qa-walk/SKILL.md        agent instructions
 skills/qa-walk/qa-browser.sh   doctor | setup | open | go | key | stop
-mods/qa-walk/main.js           Herdr app mod (gpui-kit)
-mods/qa-walk/mod.json          popup overlay, no layout change
+qa-walk/RECIPE.md              the brief herdr.dev lists the mod from
+qa-walk/preview.png            listing picture (also popup.png, floating.png)
+qa-walk/keys.json              optional key binding to merge
+qa-walk/mods/qa-walk/          Herdr app mod (gpui-kit): main.js, mod.json
 ```
+
+## Listing
+
+The repo carries the topic `herdr-mod`, so [herdr.dev/mods](https://herdr.dev/mods) lists the mod from `qa-walk/` within the hour.
+
+## License
+
+MIT
