@@ -41,6 +41,7 @@ A small popup for opening a real browser beside your terminals. Type a URL, choo
 
 ## Watch out
 
+- Checked with `herdr-app 0.1.12`; follow the installed `herdr.d.ts` and `gpui-kit.d.ts` if they differ.
 - Needs `terminal-browser` on the machine where the focused pane runs. Without it the new pane shows `command not found`.
 - `terminal-browser open --split` does not work inside Herdr (it reports "Ghostty is not running": Herdr identifies as ghostty). That is why the mod opens the browser as the new terminal's own program instead.
 - A shown popup keeps its state between openings. After editing `main.js`, saving reloads it; remembered values come from shared state, not from the copy.
