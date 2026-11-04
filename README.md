@@ -1,13 +1,13 @@
-# qa-walk
+# terminal-browser-qa-walk
 
-Let a coding agent walk your web app in a real browser while you watch it live, as a pane beside the conversation. Built for [Herdr](https://herdr.dev) (the native app, with herdr-core `hc`), on top of [terminal-browser](https://github.com/zenbu-labs/terminal-browser).
+QA walks with [terminal-browser](https://terminal-browser.sh) ([source](https://github.com/zenbu-labs/terminal-browser)), the real browser that runs inside your terminal, for [Herdr](https://herdr.dev). A coding agent walks your web app while you watch it live as a pane beside the conversation: right split by default, or split below, tab or floating window. Built on top of terminal-browser's CLI; not affiliated with it.
 
 Two parts, use either or both:
 
 | Part | For | What it is |
 |---|---|---|
 | `skills/qa-walk` | the agent | an agent skill plus `qa-browser.sh`: install dependencies, open the browser pane, drive it, close it |
-| `qa-walk/` (a [herdr.dev mod](https://herdr.dev/mods)) | you | a Herdr app mod: a popup where you type a URL and choose where the browser opens: right split (default), split below, tab or floating window |
+| `terminal-browser-qa/` (a [herdr.dev mod](https://herdr.dev/mods)) | you | a Herdr app mod: a popup where you type a URL and choose where the browser opens: right split (default), split below, tab or floating window |
 
 Project-agnostic. The project's own rules (which stack, which data, which model, what the report looks like) stay in the project.
 
@@ -18,35 +18,35 @@ An agent that tests a UI should show its work. terminal-browser renders a real C
 - `terminal-browser open --split` scripts the terminal it runs in. In Herdr's app it fails with `Ghostty is not running`, because the app reports itself as `ghostty` but is not.
 - Fix: start the browser as its own `hc` terminal carrying this tab's `herdr.space` and `herdr.tab` labels. Herdr adopts any terminal with those labels as a pane in that tab. `qa-browser.sh open` does exactly that.
 
-![qa-walk opening herdr.dev in a right split](qa-walk/preview.png)
+![terminal-browser opening herdr.dev in a right split](terminal-browser-qa/preview.png)
 
 | Popup | Floating window |
 |---|---|
-| ![popup](qa-walk/popup.png) | ![floating](qa-walk/floating.png) |
+| ![popup](terminal-browser-qa/popup.png) | ![floating](terminal-browser-qa/floating.png) |
 
 ## Install
 
 Needs `node`, `terminal-browser`, and inside Herdr `hc`.
 
 ```sh
-git clone git@github.com:vedovato/qa-walk.git ~/Developer/qa-walk
-~/Developer/qa-walk/skills/qa-walk/qa-browser.sh doctor    # what is missing
-~/Developer/qa-walk/skills/qa-walk/qa-browser.sh setup     # installs terminal-browser (asks nothing: you run it)
+git clone git@github.com:vedovato/terminal-browser-qa-walk.git ~/Developer/terminal-browser-qa-walk
+~/Developer/terminal-browser-qa-walk/skills/qa-walk/qa-browser.sh doctor    # what is missing
+~/Developer/terminal-browser-qa-walk/skills/qa-walk/qa-browser.sh setup     # installs terminal-browser (asks nothing: you run it)
 ```
 
 Skill, on each machine and agent that should have it (symlinks, so `git pull` updates them):
 
 ```sh
-ln -sfn ~/Developer/qa-walk/skills/qa-walk ~/.omp/agent/managed-skills/qa-walk   # omp
-ln -sfn ~/Developer/qa-walk/skills/qa-walk ~/.claude/skills/qa-walk              # Claude Code
+ln -sfn ~/Developer/terminal-browser-qa-walk/skills/qa-walk ~/.omp/agent/managed-skills/qa-walk   # omp
+ln -sfn ~/Developer/terminal-browser-qa-walk/skills/qa-walk ~/.claude/skills/qa-walk              # Claude Code
 ```
 
-Mod, on the machine where the Herdr window runs (or ask your agent: `Read ~/.config/herdr-app/AGENTS.md, then add this mod: herdr.dev/mods/vedovato/qa-walk`). Merge `qa-walk/keys.json` into your `keys.json` for `ctrl-alt-b`:
+Mod, on the machine where the Herdr window runs (or ask your agent: `Read ~/.config/herdr-app/AGENTS.md, then add this mod: herdr.dev/mods/vedovato/terminal-browser-qa`). Merge `terminal-browser-qa/keys.json` into your `keys.json` for `ctrl-alt-b`:
 
 ```sh
-ln -sfn ~/Developer/qa-walk/qa-walk/mods/qa-walk ~/.config/herdr-app/mods/qa-walk
-herdr-app check ~/.config/herdr-app/mods/qa-walk
-herdr-app do mod.open --name qa-walk     # toggles the popup; bind a key to mod.open to keep it handy
+ln -sfn ~/Developer/terminal-browser-qa-walk/terminal-browser-qa/mods/terminal-browser-qa ~/.config/herdr-app/mods/terminal-browser-qa
+herdr-app check ~/.config/herdr-app/mods/terminal-browser-qa
+herdr-app do mod.open --name terminal-browser-qa     # toggles the popup; bind a key to mod.open to keep it handy
 ```
 
 `setup` installs `terminal-browser` with `brew install` when brew exists, else the vendor's `curl | bash` installer. It never installs `node` or `hc`. An agent should run it only after you agree.
@@ -56,7 +56,7 @@ herdr-app do mod.open --name qa-walk     # toggles the popup; bind a key to mod.
 The agent opens, drives and closes the browser:
 
 ```sh
-S=~/Developer/qa-walk/skills/qa-walk/qa-browser.sh
+S=~/Developer/terminal-browser-qa-walk/skills/qa-walk/qa-browser.sh
 $S open https://app.localhost:3000/                       # pane appears; prints the browser key
 KEY=$($S key)
 env -u TERM_PROGRAM terminal-browser action --browser $KEY -- snapshot -i
@@ -104,15 +104,15 @@ If the agent runs on one machine and the Herdr window on another (an `hc machine
 ```
 skills/qa-walk/SKILL.md        agent instructions
 skills/qa-walk/qa-browser.sh   doctor | setup | open | go | key | stop
-qa-walk/RECIPE.md              the brief herdr.dev lists the mod from
-qa-walk/preview.png            listing picture (also popup.png, floating.png)
-qa-walk/keys.json              optional key binding to merge
-qa-walk/mods/qa-walk/          Herdr app mod (gpui-kit): main.js, mod.json
+terminal-browser-qa/RECIPE.md              the brief herdr.dev lists the mod from
+terminal-browser-qa/preview.png            listing picture (also popup.png, floating.png)
+terminal-browser-qa/keys.json              optional key binding to merge
+terminal-browser-qa/mods/terminal-browser-qa/          Herdr app mod (gpui-kit): main.js, mod.json
 ```
 
 ## Listing
 
-The repo carries the topic `herdr-mod`, so [herdr.dev/mods](https://herdr.dev/mods) lists the mod from `qa-walk/` within the hour.
+The repo carries the topic `herdr-mod`, so [herdr.dev/mods](https://herdr.dev/mods) lists the mod from `terminal-browser-qa/` within the hour.
 
 ## License
 

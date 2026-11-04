@@ -26,8 +26,8 @@ A small popup for opening a real browser beside your terminals. Type a URL, choo
 
 ## Built from
 
-- **One mod**, `mods/qa-walk/`, with `main.js` and `mod.json`. `mod.json` is `{ "place": "none", "title": "QA walk", "overlay": { "kind": "popup", "width": 480, "height": 250 } }`: nothing is added to a layout and there is no `layouts/` folder.
-- **A `keys.json` snippet** with `ctrl-alt-b` bound to `mod.open:qa-walk` under `global` and `terminal`. Merge it into the person's keys and ask before replacing a key they already use.
+- **One mod**, `mods/terminal-browser-qa/`, with `main.js` and `mod.json`. `mod.json` is `{ "place": "none", "title": "QA walk", "overlay": { "kind": "popup", "width": 480, "height": 250 } }`: nothing is added to a layout and there is no `layouts/` folder.
+- **A `keys.json` snippet** with `ctrl-alt-b` bound to `mod.open:terminal-browser-qa` under `global` and `terminal`. Merge it into the person's keys and ask before replacing a key they already use.
 - **A `View`** using `gpui-kit` and `gpui-base` (`Input`, `InputState`, `h_flex`, `v_flex`) and `theme()` colors. The same module renders the floating window's title bar when its props say `mode: "titlebar"`, so the window needs no second mod.
 - **Commands and functions from `herdr`:**
   - `run("terminal.open", { argv: ["terminal-browser", "open", url], place, name })` with `place` one of `right`, `down`, `tab`;
@@ -49,8 +49,8 @@ A small popup for opening a real browser beside your terminals. Type a URL, choo
 
 ## Done when
 
-- `herdr-app check mods/qa-walk` passes with the matching Herdr binary.
-- `herdr-app do mod.open --name qa-walk` shows the popup with "Right split" chosen on a fresh home; running it again closes it.
+- `herdr-app check mods/terminal-browser-qa` passes with the matching Herdr binary.
+- `herdr-app do mod.open --name terminal-browser-qa` shows the popup with "Right split" chosen on a fresh home; running it again closes it.
 - Enter on `https://herdr.dev` with "Right split" opens a pane to the right showing the page; "Split below" opens one below; "Tab" opens a tab named "browser".
 - With "Floating", a window with a "QA browser" title bar opens over the layout, can be dragged by the bar, and "Close" removes it and ends its terminal (`hc ls` shows no `terminal-browser` left).
 - The chosen place and URL are still selected the next time the popup opens.

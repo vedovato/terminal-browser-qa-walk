@@ -1,4 +1,0 @@
-{
-  "global": { "ctrl-alt-b": "mod.open:qa-walk" },
-  "terminal": { "ctrl-alt-b": "mod.open:qa-walk" }
-}

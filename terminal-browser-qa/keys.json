@@ -1,0 +1,4 @@
+{
+  "global": { "ctrl-alt-b": "mod.open:terminal-browser-qa" },
+  "terminal": { "ctrl-alt-b": "mod.open:terminal-browser-qa" }
+}

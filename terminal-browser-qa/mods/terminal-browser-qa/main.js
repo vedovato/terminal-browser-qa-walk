@@ -1,6 +1,6 @@
 // QA walk: type a URL, pick where it opens, press Enter. terminal-browser opens as a split to the right
 // of the focused pane (default), a split below, a tab, or a floating window you can drag.
-// Open the popup with: herdr-app do mod.open --name qa-walk   (or bind a key to mod.open:qa-walk).
+// Open the popup with: herdr-app do mod.open --name terminal-browser-qa   (or bind a key to mod.open:terminal-browser-qa).
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex, InputState, Input } from "gpui-base";
 import { run, props, closeOverlay, openOverlay, theme, shared, setShared, hc, focused, spaces } from "herdr";
@@ -46,7 +46,7 @@ export default class QaWalk extends View {
       openOverlay({
         kind: "window", key: "qa-walk-float", width: 0.7, height: 0.75,
         layout: { type: "column", children: [
-          { type: "block", size: { px: 30 }, content: { mod: "qa-walk", props: { mode: "titlebar", terminal } } },
+          { type: "block", size: { px: 30 }, content: { mod: "terminal-browser-qa", props: { mode: "titlebar", terminal } } },
           { type: "block", content: { terminal } },
         ] },
       });
